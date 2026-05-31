@@ -1,0 +1,196 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>IPTV Dashboard</title>
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+<style>
+body{
+margin:0;
+font-family:Arial, sans-serif;
+background:#0b1220;
+color:#fff;
+display:flex;
+height:100vh;
+}
+
+.sidebar{
+width:300px;
+background:#111a2e;
+padding:15px;
+overflow-y:auto;
+}
+
+h2{
+font-size:18px;
+margin-bottom:10px;
+}
+
+select,input{
+width:100%;
+padding:10px;
+margin:5px 0;
+border:none;
+border-radius:6px;
+}
+
+.channel{
+padding:10px;
+margin:5px 0;
+background:#1a2742;
+cursor:pointer;
+border-radius:6px;
+font-size:14px;
+}
+
+.channel:hover{
+background:#26395f;
+}
+
+.main{
+flex:1;
+display:flex;
+flex-direction:column;
+}
+
+.player{
+flex:1;
+background:black;
+display:flex;
+align-items:center;
+justify-content:center;
+}
+
+video{
+width:100%;
+height:100%;
+}
+
+.topbar{
+padding:10px;
+background:#111a2e;
+display:flex;
+gap:10px;
+}
+
+button{
+padding:8px 10px;
+border:none;
+border-radius:5px;
+cursor:pointer;
+background:#2d6cdf;
+color:white;
+}
+
+button:hover{
+background:#1f4ea8;
+}
+
+.fav{
+background:#ffb400;
+color:#000;
+}
+</style>
+</head>
+<body>
+
+<div class="sidebar">
+<h2>🌍 IPTV Countries</h2>
+<select id="countrySelect" onchange="loadChannels()">
+<option value="ng">Nigeria</option>
+<option value="us">USA</option>
+<option value="gb">UK</option>
+<option value="in">India</option>
+<option value="za">South Africa</option>
+<option value="fr">France</option>
+<option value="de">Germany</option>
+<option value="br">Brazil</option>
+</select>
+
+<input type="text" id="search" placeholder="Search channels..." onkeyup="filterChannels()" />
+
+<h2>📺 Channels</h2>
+<div id="channels"></div>
+</div>
+
+<div class="main">
+<div class="topbar">
+<button onclick="toggleFav()">⭐ Favorites</button>
+<button onclick="loadChannels()">🔄 Reload</button>
+</div>
+<div class="player">
+<video id="video" controls></video>
+</div>
+</div>
+
+<script>
+let allChannels = [];
+let favorites = JSON.parse(localStorage.getItem('fav') || '[]');
+
+async function loadChannels(){
+let country = document.getElementById('countrySelect').value;
+let url = `https://iptv-org.github.io/iptv/countries/${country}.m3u`;
+
+let res = await fetch(url);
+let text = await res.text();
+parseM3U(text);
+}
+
+function parseM3U(data){
+allChannels = [];
+let lines = data.split('\n');
+let name = '';
+
+for(let i=0;i<lines.length;i++){
+if(lines[i].startsWith('#EXTINF')){
+name = lines[i].split(',')[1];
+}else if(lines[i].startsWith('http')){
+allChannels.push({name, url:lines[i]});
+}
+}
+renderChannels(allChannels);
+}
+
+function renderChannels(list){
+let container = document.getElementById('channels');
+container.innerHTML = '';
+
+list.forEach(ch=>{
+let div = document.createElement('div');
+div.className='channel';
+div.innerText = ch.name;
+div.onclick=()=>playChannel(ch.url);
+container.appendChild(div);
+});
+}
+
+function playChannel(url){
+let video = document.getElementById('video');
+
+if(Hls.isSupported()){
+let hls = new Hls();
+hls.loadSource(url);
+hls.attachMedia(video);
+}else{
+video.src = url;
+}
+video.play();
+}
+
+function filterChannels(){
+let val = document.getElementById('search').value.toLowerCase();
+let filtered = allChannels.filter(c=>c.name.toLowerCase().includes(val));
+renderChannels(filtered);
+}
+
+function toggleFav(){
+alert('Favorites feature coming next update');
+}
+
+loadChannels();
+</script>
+
+</body>
+</html>
