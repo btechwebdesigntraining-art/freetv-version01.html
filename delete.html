@@ -1,0 +1,77 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Church Manager</title>
+<style>
+body {
+    font-family: Arial;
+    background: #0b0f1a;
+    color: white;
+    padding: 20px;
+}
+
+.card {
+    background: #111827;
+    padding: 15px;
+    margin: 10px 0;
+    border-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+button {
+    background: red;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: darkred;
+}
+</style>
+</head>
+
+<body>
+
+<h2>⛪ Church Control Panel</h2>
+
+<div id="churchList">
+
+    <div class="card" data-id="1">
+        RCCG Abuja Central
+        <button onclick="deleteChurch(this)">Delete Church</button>
+    </div>
+
+    <div class="card" data-id="2">
+        Winners Chapel Abuja
+        <button onclick="deleteChurch(this)">Delete Church</button>
+    </div>
+
+    <div class="card" data-id="3">
+        Dunamis Church HQ
+        <button onclick="deleteChurch(this)">Delete Church</button>
+    </div>
+
+</div>
+
+<script>
+function deleteChurch(btn) {
+    let card = btn.parentElement;
+    let churchName = card.firstChild.textContent.trim();
+
+    if (confirm("Are you sure you want to delete: " + churchName + "?")) {
+        card.remove();
+        alert("Church deleted successfully!");
+    }
+}
+</script>
+
+</body>
+</html>
