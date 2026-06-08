@@ -1,0 +1,200 @@
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Church Security Center - Lock Church</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
+background:#0b1220;
+color:#fff;
+min-height:100vh;
+}
+
+.header{
+background:#111a2e;
+padding:20px;
+text-align:center;
+font-size:30px;
+font-weight:bold;
+color:#ef4444;
+}
+
+.container{
+max-width:900px;
+margin:30px auto;
+padding:20px;
+}
+
+.card{
+background:#111a2e;
+padding:25px;
+border-radius:15px;
+box-shadow:0 0 20px rgba(0,0,0,.3);
+}
+
+.card h2{
+color:#ef4444;
+margin-bottom:20px;
+}
+
+input,
+select,
+textarea{
+width:100%;
+padding:12px;
+margin-bottom:12px;
+border:none;
+border-radius:8px;
+background:#1a2742;
+color:white;
+}
+
+button{
+width:100%;
+padding:14px;
+border:none;
+border-radius:8px;
+background:#ef4444;
+color:white;
+font-weight:bold;
+cursor:pointer;
+font-size:16px;
+}
+
+button:hover{
+opacity:.9;
+}
+
+.status{
+margin-top:15px;
+padding:15px;
+background:#7f1d1d;
+border-radius:8px;
+display:none;
+}
+
+.logs{
+margin-top:20px;
+background:#000;
+padding:15px;
+height:220px;
+overflow:auto;
+border-radius:10px;
+font-family:monospace;
+}
+
+.badge{
+display:inline-block;
+padding:8px 15px;
+background:#7f1d1d;
+border-radius:20px;
+margin-bottom:15px;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="header">
+🔒 LOCK CHURCH SECURITY CENTER
+</div>
+
+<div class="container">
+
+<div class="card">
+
+<div class="badge">
+Security Protection
+</div>
+
+<h2>Lock Church Account</h2>
+
+<select id="churchName">
+<option>RCCG Victory Centre</option>
+<option>Dunamis International</option>
+<option>Winners Chapel</option>
+<option>Christ Embassy</option>
+<option>Living Faith Church</option>
+</select>
+
+<textarea
+id="reason"
+placeholder="Reason for locking this church account">
+</textarea>
+
+<button onclick="lockChurch()">
+🔒 Lock Church
+</button>
+
+<div id="status" class="status">
+🚫 Church Account Locked Successfully
+</div>
+
+</div>
+
+<div id="logs" class="logs">
+SYSTEM READY...
+</div>
+
+</div>
+
+<script>
+
+function log(message){
+
+const logs =
+document.getElementById("logs");
+
+logs.innerHTML +=
+"<br>[" +
+new Date().toLocaleTimeString() +
+"] " + message;
+
+logs.scrollTop =
+logs.scrollHeight;
+
+}
+
+function lockChurch(){
+
+const church =
+document.getElementById("churchName").value;
+
+const reason =
+document.getElementById("reason").value;
+
+document.getElementById("status")
+.style.display = "block";
+
+log(
+"Church Locked: " +
+church +
+" | Reason: " +
+(reason || "No reason provided")
+);
+
+alert(
+church +
+" has been locked successfully"
+);
+
+}
+
+</script>
+
+</body>
+</html>
+```
